@@ -12,7 +12,8 @@ Development steps, please keep in mind that we are assessing the ability of a de
 4. Deploy to Vercel, add credentials, test, and share the link back with us
 5. Optional Bonus: add login/login auth with JWT and auth users that will use the todo list
 
-For design you can use your own components or any library you want, like bootstrap, material-ui, etc.
+Design: https://www.figma.com/file/e2z5BD5mtYQjAlHAWAnCF4/Double-slash-Take-Away-Test
+Font: https://fonts.google.com/specimen/Poppins
 
 ## Getting Started With Next.JS
 
