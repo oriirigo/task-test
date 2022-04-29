@@ -1,55 +1,37 @@
 import Head from 'next/head'
 import styles from '../styles/main.module.css'
 
+
+import { collection, onSnapshot, query,orderBy,getDocs } from "@firebase/firestore"
+import { useEffect, useState } from "react"
+import { db ,app} from "../firebase/firebase"
+
 export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Next JS - Task Manager</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+  const [todos, setTodos]=useState([])
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to Task Manager
-        </h1>
+  useEffect(() => {
+    const collectionRef=collection(db ,"task")
 
-        <p className={styles.description}>
-          This is based in: <a href="https://nextjs.org">Next.js!</a><br/>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+    const q=query(collectionRef,orderBy("timestamp","desc"));
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+    const unsubcribe=onSnapshot(q,(querySnapshot)=>{
+      
+      setTodos(querySnapshot.docs.map(doc=>({...doc.data(),id:doc.id, timestamp:doc.data().timestamp?.toDate().getTime()})))
+    });
+    return unsubcribe
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+    // const getTodos=async()=>{
+    //   const todosCollectionRef=collection(db,"task")
+    //  const data= await getDocs(todosCollectionRef)
+    //  setTodos(data.docs.map((doc)=>({...doc.data(),id:doc.id})))
+    // }
+    // getTodos()
+  }, [])
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+  return(
+    <div>
+       {todos.map(todo=><h1 key={todo.id}>Title: {todo.title}</h1>)}
     </div>
   )
+
 }
