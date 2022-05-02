@@ -3,13 +3,20 @@
 
 
 .mainDiv{
-min-height: 476px;
+min-height: 500px;
 width: 1156px;
-left: 280px;
-top: -80px;
+align-content: center;
+
+
+/* left: 280px;
+top: -80px; */
+margin: auto;
 border-radius: 0px;
 background: #FFB114; 
 position: relative;
+justify-content: center;
+min-width: 800px;
+border-collapse: collapse;
 
 }
 .id{
@@ -131,12 +138,12 @@ color: black;
 
 .header{
 height: 101px;
-width:auto;
-left: -1px;
+width: 100%;
+
 margin-top: -17px;
 border-radius: 0px;
 background: #333333;
-
+overflow-x: auto;
     }
 
 .header1{
