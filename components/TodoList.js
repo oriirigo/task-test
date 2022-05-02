@@ -4,11 +4,33 @@ import { useTasks } from "../context/taskContext"
 import { db } from "../firebase/firebase"
 import Todo from './Todo'
 import Styles from "../styles/StylesFirst.module.css"
+import { useForm} from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
 export default function TodoList() {
   const [tasks, setTasks] = useState([])
   const { setStatus, setTitle, status, title, setIsUpDate, isUpDate, id, setId } = useTasks()
  
+
+    // form validation rules 
+    const validationSchema = Yup.object().shape({
+      title: Yup.string()
+          .required('Status is required'),
+      status: Yup.string()
+          .required('Status is required'),
+      
+  });
+  const formOptions = { resolver: yupResolver(validationSchema) };
+
+    // get functions to build form with useForm() hook
+    const { register, handleSubmit, reset, formState } = useForm(formOptions);
+    const { errors } = formState;
+
+
+
+
+
   useEffect(() => {
     const q = query(collection(db, 'task'), orderBy('title', 'desc'))
     onSnapshot(q, (querySnapshot) => {
@@ -23,7 +45,7 @@ export default function TodoList() {
  
  
   const onSubmit = async (e) => {
-    e.preventDefault()
+ 
     try {
       await addDoc(collection(db, 'task'), {
         title: title,
@@ -31,13 +53,14 @@ export default function TodoList() {
       })
       setStatus('')
       setTitle('')
+      reset()
     } catch (err) {
       alert(err)
     }
   }
  
   const upDateFields = async (e) => {
-    e.preventDefault()
+
     let fieldToEdit = doc(db, 'task', id)
     await updateDoc(fieldToEdit, {
       title: title,
@@ -47,6 +70,7 @@ export default function TodoList() {
         setStatus('')
         setTitle('')
         setIsUpDate(false)
+        reset()
       })
       .catch((err) => {
         console.log(err)
@@ -65,25 +89,28 @@ export default function TodoList() {
         <div >
         <form className={Styles.form}   >
             <div  >
-        <input className={Styles.input} aling='right' placeholder='New Todo' type='text' value={title} onChange={e => setTitle(e.target.value)}/>
+        <input className={Styles.input} aling='right' placeholder='New Todo' type='text' value={title} name='status'{...register('title') }  onChange={e => setTitle(e.target.value)} />
+        {errors.title && errors.title.type=='required' && <p>Title is required</p>}
         </div>
        
        <div ><br></br><br></br></div>
     
         <div >
            
-          <select  className={Styles.input} onChange={e => setStatus(e.target.value)}>
+          <select  className={Styles.input} name='status'{...register('status') } onChange={e => setStatus(e.target.value)} >
             <option disabled    >Status(Pending/ In progress/ Done</option>
             <option value="Done" name="Done">Done</option>
             <option value="In progress" name="In progress" >In progress</option>
             <option value="Pending" name="Pending" >Pending</option>
+            
           </select>
+          <div>{errors.title?.message}</div>
         </div>
         <div >
             <br></br>
             <br></br>
-        {!isUpDate ? (<button className={Styles.button} onClick={onSubmit}>ADD</button>) :
-          (<button onClick={upDateFields}  className={Styles.button} >MODIFY</button>)}
+        {!isUpDate ? (<button className={Styles.button} onClick={handleSubmit(onSubmit)}>ADD</button>) :
+          (<button onClick={handleSubmit(upDateFields)}  className={Styles.button} >MODIFY</button>)}
           </div>
           </form>
  </div>
