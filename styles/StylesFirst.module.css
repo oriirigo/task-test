@@ -3,19 +3,18 @@
 
 
 .mainDiv{
-min-height: 500px;
-width: 1156px;
+height: 500px;
+width: 90%;
+max-width:1200px;
 align-content: center;
-
-
 /* left: 280px;
 top: -80px; */
-margin: auto;
+margin: 0 auto;
 border-radius: 0px;
 background: #FFB114; 
 position: relative;
 justify-content: center;
-min-width: 800px;
+
 border-collapse: collapse;
 
 }
@@ -138,12 +137,13 @@ color: black;
 
 .header{
 height: 101px;
-width: 100%;
+
 
 margin-top: -17px;
 border-radius: 0px;
 background: #333333;
-overflow-x: auto;
+background-size: cover;
+background-position: top;
     }
 
 .header1{
@@ -168,3 +168,14 @@ font-family: Poppins;
 font-size:large;
 
     }
+
+    @media (max-width: 1160px) { .mainDiv {
+        display:grid;    
+        margin: auto;
+        margin-top: 100px;
+        gap: 0.5rem;
+        grid-auto-columns: -100rem;
+        
+              }
+         }
+        

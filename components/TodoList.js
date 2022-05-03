@@ -80,8 +80,7 @@ export default function TodoList() {
 
   return (
     <>
-      <header className={Styles.header}>
-        <br></br><h2 className={Styles.header1}>TODO LIST</h2></header>
+      
       <div className={Styles.mainDiv}>
         <div className={Styles.id}>  <br></br>
           <h3 className={Styles.h3}>TODO LIST</h3></div>
